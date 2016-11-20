@@ -1,0 +1,8 @@
+version: "2"
+services:
+  yasb:
+    build:
+      context: .
+    image: bjorand/yasb
+    ports:
+      - "8080:8080"

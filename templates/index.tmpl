@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/rainbow.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Yasb - Yet Another Spam Blacklist</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <h1>Yet Another Spam Blacklist</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s8">
+          <h2>API v1</h2>
+          <h3>Search Yasb</h3>
+<p>Search an IP:</p>
+<pre><code class="bash">curl http://yasb.intuxication.org/api/check.xml?ip=&lt;IPv4&gt;
+</code></pre>
+<p>Response:</p>
+<pre><code class="xml">&lt;result&gt;
+    &lt;ip&gt;IPv4&lt;/ip&gt;
+    &lt;spam&gt;Boolean&lt;spam&gt;
+&lt;/result&gt;
+</code></pre>
+<p>Submit an IP:</p>
+<pre><code class="bash">curl http://yasb.intuxication.org/api/submit.xml?ip=&lt;IPv4&gt;
+</code></pre>
+<p>Response:</p>
+<pre><code class="xml">&lt;result&gt;
+    &lt;ip&gt;IPv4&lt;/ip&gt;
+    &lt;spam&gt;Boolean&lt;spam&gt;
+&lt;/result&gt;
+</code></pre>
+        </div>
+        <div class="col s4">
+          <h2>News</h2>
+          <h4>2014/08/23 : Code available</h4>
+          <p>Yasb is now opensource at <a href="http://github.com/bjorand/yasb">github</a>.</p>
+          <h4>2009/03/07 : Better accuracy</h4>
+          <p>Yasb now features blacklists from spamhaus, spamcop and
+            projecthoneypot. All queries done with api/check.xml are now checked
+            against those blacklists and yasb internal database is updated.
+          </p>
+          <h4>2008/01/05 : Launch of Yasb !</h4>
+          <p>Yasb is a spam blocker service which lists IP of web spamners.
+            It can be interfaced with wiki, forums or blogs software. An API is
+            provided to query Yasb database in order to check IPs and report
+            new annoying IP.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer class="page-footer brown lighten-1">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Yet Another Spam Blacklist</h5>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">YASB links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="http://github.com/bjorand/yasb">Source code</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            &copy; 2008-2016 Intuxication Copyright
+            </div>
+          </div>
+    </footer>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
