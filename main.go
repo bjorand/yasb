@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hashicorp/golang-lru/simplelru"
 	"github.com/mrichman/godnsbl"
 )
 
@@ -17,6 +18,7 @@ type result struct {
 }
 
 func main() {
+	lru, _ := simplelru.NewLRU(1024, nil)
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
 	r.GET("/", func(c *gin.Context) {
@@ -28,25 +30,36 @@ func main() {
 		ip := net.ParseIP(rawIP)
 		if ip.To4() != nil {
 			_result.IP = ip.String()
-		}
-		wg := &sync.WaitGroup{}
-		results := make([]godnsbl.Result, len(godnsbl.Blacklists))
-		for i, source := range godnsbl.Blacklists {
-			wg.Add(1)
-			go func(i int, source string) {
-				defer wg.Done()
-				rbl := godnsbl.Lookup(source, rawIP)
-				if len(rbl.Results) == 0 {
-					results[i] = godnsbl.Result{}
-				} else {
-					results[i] = rbl.Results[0]
-					_result.Score++
+			cached, ok := lru.Get(rawIP)
+			if !ok {
+				wg := &sync.WaitGroup{}
+				results := make([]godnsbl.Result, len(godnsbl.Blacklists))
+				for i, source := range godnsbl.Blacklists {
+					wg.Add(1)
+					go func(i int, source string) {
+						defer wg.Done()
+						rbl := godnsbl.Lookup(source, rawIP)
+						if len(rbl.Results) == 0 {
+							results[i] = godnsbl.Result{}
+						} else {
+							results[i] = rbl.Results[0]
+							_result.Score++
+						}
+					}(i, source)
 				}
-			}(i, source)
+				if _result.Score > 0 {
+					_result.Spam = true
+				}
+				lru.Add(rawIP, _result.Spam)
+			} else {
+				if cached == "true" {
+					_result.Spam = true
+				} else {
+					_result.Spam = false
+				}
+			}
 		}
-		if _result.Score > 0 {
-			_result.Spam = true
-		}
+
 		c.XML(http.StatusOK, _result)
 	})
 	r.Run() // listen and server on 0.0.0.0:8080
